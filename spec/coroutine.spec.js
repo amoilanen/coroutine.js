@@ -17,7 +17,15 @@ describe('coroutine', () => {
       expect(executedFunction).toBe(true);
     });
 
+    it('should pass arguments to function', (done) => {
+      coroutine((x, y, z) => {
+        expect([x, y, z]).toEqual([1, 2, 3]);
+        done();
+      }, 1, 2, 3);
+    });
+
     //TODO: Should pass arguments to function
     //TODO: Should return function return value
+    //TODO: Should call the function in the containing context
   });
 });
