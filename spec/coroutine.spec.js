@@ -24,8 +24,18 @@ describe('coroutine', () => {
       }, 1, 2, 3);
     });
 
-    //TODO: Should pass arguments to function
-    //TODO: Should return function return value
-    //TODO: Should call the function in the containing context
+    it('should execute function in the correct context', (done) => {
+      var context = {
+        value: 'valueInContext'
+      };
+
+      //() => {} would ignore the context
+      coroutine.call(context, function() {
+        expect(this.value).toBe('valueInContext');
+        done();
+      });
+    });
+
+    //TODO: Should return function return value?
   });
 });
