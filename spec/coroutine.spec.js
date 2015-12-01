@@ -1,6 +1,8 @@
+import {coroutine} from './coroutine'
+
 describe('coroutine', () => {
 
-  it('dummy spec', () => {
-    expect(true).toBe(true);
+  it('should be defined', () => {
+    expect(coroutine).toBeDefined();
   });
 });
