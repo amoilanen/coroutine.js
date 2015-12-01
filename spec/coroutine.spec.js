@@ -36,6 +36,10 @@ describe('coroutine', () => {
       });
     });
 
-    //TODO: Should return function return value?
+    it('should return the function\'s return value', () => {
+      expect(coroutine(() => {
+        return 'returnValue';
+      })).toBe('returnValue');
+    });
   });
 });
