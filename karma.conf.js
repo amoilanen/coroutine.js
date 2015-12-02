@@ -3,6 +3,8 @@ module.exports = function(config) {
     basePath: '.',
     frameworks: ['jasmine'],
     files: [
+      './node_modules/phantomjs-polyfill/bind-polyfill.js',
+      './node_modules/promise-polyfill/Promise.js',
       'compiled/*.js'
     ],
     exclude: [

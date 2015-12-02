@@ -5,7 +5,7 @@ Every item includes supporting normal execution, errors thrown by the function b
 - Generator that yields simple values is executed
 - Generator that yields promises is executed
 - Generator that yields an invocation of another generator is executed
-- Combining co-routines together?
+- Combining co-routines together? Inside a generator?
 
 - Test various module loading schemes, loading in a browser, loading in Node.js
 - Write a few coroutine examples

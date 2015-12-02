@@ -36,10 +36,12 @@ describe('coroutine', () => {
       });
     });
 
-    it('should return the function\'s return value', () => {
-      expect(coroutine(() => {
+    it('should return promise that immediately resolves to function\'s return value', () => {
+      coroutine(() => {
         return 'returnValue';
-      })).toBe('returnValue');
+      }).then(value => {
+        expect(value).toBe('returnValue');
+      });
     });
   });
 });
