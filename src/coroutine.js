@@ -1,7 +1,5 @@
-function coroutine(func) {
-  var args = [].slice.call(arguments, 1);
-
+function coroutine(func, ...args) {
   return func.apply(this, args);
 }
 
-export {coroutine};
+export default coroutine

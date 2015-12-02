@@ -1,4 +1,4 @@
-import {coroutine} from './coroutine'
+import coroutine from './coroutine'
 
 describe('coroutine', () => {
 
@@ -17,14 +17,14 @@ describe('coroutine', () => {
       expect(executedFunction).toBe(true);
     });
 
-    it('should pass arguments to function', (done) => {
+    it('should pass arguments to function', done => {
       coroutine((x, y, z) => {
         expect([x, y, z]).toEqual([1, 2, 3]);
         done();
       }, 1, 2, 3);
     });
 
-    it('should execute function in the correct context', (done) => {
+    it('should execute function in the correct context', done => {
       var context = {
         value: 'valueInContext'
       };
