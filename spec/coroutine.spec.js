@@ -54,4 +54,39 @@ describe('coroutine', () => {
       );
     });
   });
+
+  describe('generator argument', () => {
+
+    describe('returns simple values', () => {
+
+      describe('no yields', () => {
+
+        it('executes the generator until it stops', function() {
+          coroutine(function* oneStep() {
+            return 'returnValue';
+          }).then(value =>
+            expect(value).toBe('returnValue')
+          );
+        });
+      });
+
+      xdescribe('several yields', function() {
+
+        it('executes the generator until it stops', function() {
+          coroutine(function* oneStep() {
+            var x = yield 'a';
+            var y = yield 'b';
+            return 'c';
+          }).then(value =>
+            expect(value).toBe('c')
+          );
+        });
+      });
+
+      //TODO: generator with several steps and arguments
+    });
+
+    
+    //TODO: Should pass values to the generator function
+  });
 });
