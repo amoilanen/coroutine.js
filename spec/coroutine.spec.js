@@ -34,12 +34,13 @@ describe('coroutine', () => {
       });
     });
 
-    it('should return promise that immediately resolves to function\'s return value', () => {
+    it('should return promise that immediately resolves to function\'s return value', (done) => {
       coroutine(() => {
         return 'returnValue';
-      }).then(value =>
-        expect(value).toBe('returnValue')
-      );
+      }).then(value => {
+        expect(value).toBe('returnValue');
+        done();
+      });
     });
 
     //TODO: Function throws an exception
@@ -61,32 +62,42 @@ describe('coroutine', () => {
 
       describe('no yields', () => {
 
-        it('executes the generator until it stops', function() {
+        it('executes the generator until it stops', (done) => {
           coroutine(function* oneStep() {
             return 'returnValue';
-          }).then(value =>
-            expect(value).toBe('returnValue')
-          );
+          }).then(value => {
+            expect(value).toBe('returnValue');
+            done();
+          });
         });
       });
 
-      xdescribe('several yields', function() {
+      describe('has yields', function() {
 
-        it('executes the generator until it stops', function() {
-          coroutine(function* oneStep() {
-            var x = yield 'a';
-            var y = yield 'b';
+        it('executes the generator until it stops', (done) => {
+          var iterationsCount = 0;
+
+          coroutine(function* withYields() {
+            iterationsCount++;
+            yield 'a';
+            iterationsCount++;
+            yield 'b';
+            iterationsCount++;
             return 'c';
-          }).then(value =>
-            expect(value).toBe('c')
-          );
+          }).then(value => {
+            expect(value).toBe('c');
+            expect(iterationsCount).toBe(3);
+            done();
+          });
         });
+
+        //TODO: From a yield the value yielded is returned
       });
 
       //TODO: generator with several steps and arguments
     });
 
-    
+    //TODO: If the value yielded is a promise the value to which it resolves is returned
     //TODO: Should pass values to the generator function
   });
 });
