@@ -11,16 +11,16 @@ describe('coroutine', () => {
     it('should execute function', () => {
       var executedFunction = false;
 
-      coroutine(() => {
-        executedFunction = true;
-      });
+      coroutine(() =>
+        executedFunction = true
+      );
       expect(executedFunction).toBe(true);
     });
 
     it('should pass arguments to function', () => {
-      coroutine((x, y, z) => {
-        expect([x, y, z]).toEqual([1, 2, 3]);
-      }, 1, 2, 3);
+      coroutine((x, y, z) =>
+        expect([x, y, z]).toEqual([1, 2, 3])
+      , 1, 2, 3);
     });
 
     it('should immediately execute function in the correct context', () => {
@@ -35,9 +35,7 @@ describe('coroutine', () => {
     });
 
     it('should return promise that immediately resolves to function\'s return value', (done) => {
-      coroutine(() => {
-        return 'returnValue';
-      }).then(value => {
+      coroutine(() => 'returnValue').then(value => {
         expect(value).toBe('returnValue');
         done();
       });
@@ -45,15 +43,21 @@ describe('coroutine', () => {
 
     it('should return promise that rejects if the function throws an exception', (done) => {
       coroutine(() => {
-        throw 'someError';
+        throw 'someError'
       }).catch(error => {
         expect(error).toBe('someError');
         done();
       });
     });
 
-    //TODO: Function throws an exception
-    //TODO: Function returns a promise?
+    it('should return a promise chained to the promise returned by the function if it returns a promise', (done) => {
+      coroutine(() =>
+        Promise.resolve('someValue')
+      ).then(value => {
+        expect(value).toBe('someValue');
+        done();
+      });
+    });
   });
 
   describe('non-function argument', () => {
