@@ -10,7 +10,11 @@ function coroutine(func, ...args) {
     }
     return Promise.resolve(value);
   } else if (typeof func === 'function') {
-    return Promise.resolve(func.apply(this, args));
+    try {
+      return Promise.resolve(func.apply(this, args));
+    } catch(e) {
+      return Promise.reject(e);
+    }
   } else {
     return Promise.resolve(func);
   }

@@ -43,6 +43,15 @@ describe('coroutine', () => {
       });
     });
 
+    it('should return promise that rejects if the function throws an exception', (done) => {
+      coroutine(() => {
+        throw 'someError';
+      }).catch(error => {
+        expect(error).toBe('someError');
+        done();
+      });
+    });
+
     //TODO: Function throws an exception
     //TODO: Function returns a promise?
   });
@@ -92,6 +101,7 @@ describe('coroutine', () => {
         });
 
         //TODO: From a yield the value yielded is returned
+        //TODO: Generator throws an exception, then the Promise fails
       });
 
       //TODO: generator with several steps and arguments
