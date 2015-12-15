@@ -71,7 +71,7 @@ describe('coroutine', () => {
 
   describe('generator argument', () => {
 
-    describe('returns simple values', () => {
+    describe('yields simple values', () => {
 
       describe('no yields', () => {
 
@@ -114,15 +114,66 @@ describe('coroutine', () => {
           });
         });
 
-        //TODO: From a yield the value yielded is returned
+        //TODO: Generator with no yields
+        //TODO: From a yield the value yielded is returned if it is a single yield?
+        //TODO: Arguments passed to generator are available when it is being executed (like with regular functions)
       });
-
-      //TODO: generator with several steps and arguments
     });
 
-    //TODO: Awaits the promises that are yielded
-    //TODO: One of the promises that are yielded rejects => whole coroutine rejects
-    //TODO: If the value yielded is a promise the value to which it resolves is returned
-    //TODO: Should pass argument values to the generator function
+    xdescribe('yields promises', () => {
+
+      function asyncResolveTo(value) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(value);
+          }, 50);
+        });
+      }
+
+      function asyncResolveTo(error) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(error);
+          }, 50);
+        });
+      }
+
+      it('awaits the promises that are yielded', (done) => {
+        var iterationsCount = 0;
+
+        coroutine(function*() {
+          iterationsCount++;
+          yield asyncResolveTo('a');
+          iterationsCount++;
+          yield asyncResolveTo('b');
+          iterationsCount++;
+          return asyncResolveTo('c');
+        }).then(value => {
+          expect(value).toBe('c');
+          expect(iterationsCount).toBe(3);
+          done();
+        });
+      });
+
+      it('returns previous promise return value from yield', (done) => {
+        coroutine(function*() {
+          var x = yield asyncResolveTo('a');
+          var y = yield asyncResolveTo('b');
+          var z = yield asyncResolveTo('c');
+          return x + y + z;
+        }).then(value => {
+          expect(value).toBe('abc');
+          done();
+        });
+      });
+
+      //TODO: One of the promises that are yielded rejects => whole coroutine rejects
+      //TODO: One of the promises that are yielded is not resolved for a long time, then times out after one minute?
+      //TODO: If the value yielded is a promise the value to which it resolves is returned
+      //TODO: Should pass argument values to the generator function
+    });
+
+    xdescribe('yielding to another generator', () => {
+    });
   });
 });
