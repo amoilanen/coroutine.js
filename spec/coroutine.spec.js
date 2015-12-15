@@ -76,7 +76,7 @@ describe('coroutine', () => {
       describe('no yields', () => {
 
         it('executes the generator until it stops', (done) => {
-          coroutine(function* oneStep() {
+          coroutine(function*() {
             return 'returnValue';
           }).then(value => {
             expect(value).toBe('returnValue');
@@ -90,7 +90,7 @@ describe('coroutine', () => {
         it('executes the generator until it stops', (done) => {
           var iterationsCount = 0;
 
-          coroutine(function* withYields() {
+          coroutine(function*() {
             iterationsCount++;
             yield 'a';
             iterationsCount++;
