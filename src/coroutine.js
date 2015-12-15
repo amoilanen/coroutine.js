@@ -1,4 +1,4 @@
-function coroutine(func, ...args) {
+function evaluate(func, args) {
   if (func.constructor.name === 'GeneratorFunction') {
     var iter = func.apply(this, args);
     var nextIter = {done: false};
@@ -8,15 +8,19 @@ function coroutine(func, ...args) {
       nextIter = iter.next();
       value = nextIter.value;
     }
-    return Promise.resolve(value);
+    return value;
   } else if (typeof func === 'function') {
-    try {
-      return Promise.resolve(func.apply(this, args));
-    } catch(e) {
-      return Promise.reject(e);
-    }
+    return func.apply(this, args);
   } else {
-    return Promise.resolve(func);
+    return func;
+  }
+}
+
+function coroutine(func, ...args) {
+  try {
+    return Promise.resolve(evaluate(func, args));
+  } catch(e) {
+    return Promise.reject(e);
   }
 }
 

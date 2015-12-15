@@ -104,14 +104,25 @@ describe('coroutine', () => {
           });
         });
 
+        it('rejects if the generator throws an exception', (done) => {
+          coroutine(function*() {
+            yield 'a';
+            throw 'someError';
+          }).catch(error => {
+            expect(error).toBe('someError');
+            done();
+          });
+        });
+
         //TODO: From a yield the value yielded is returned
-        //TODO: Generator throws an exception, then the Promise fails
       });
 
       //TODO: generator with several steps and arguments
     });
 
+    //TODO: Awaits the promises that are yielded
+    //TODO: One of the promises that are yielded rejects => whole coroutine rejects
     //TODO: If the value yielded is a promise the value to which it resolves is returned
-    //TODO: Should pass values to the generator function
+    //TODO: Should pass argument values to the generator function
   });
 });
