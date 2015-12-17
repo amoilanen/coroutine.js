@@ -120,7 +120,7 @@ describe('coroutine', () => {
       });
     });
 
-    xdescribe('yields promises', () => {
+    describe('yields promises', () => {
 
       function asyncResolveTo(value) {
         return new Promise((resolve, reject) => {
@@ -130,7 +130,7 @@ describe('coroutine', () => {
         });
       }
 
-      function asyncResolveTo(error) {
+      function asyncRejectTo(error) {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             reject(error);
