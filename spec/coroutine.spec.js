@@ -8,7 +8,7 @@ describe('coroutine', () => {
 
   describe('function argument', () => {
 
-    it('should execute function', () => {
+    it('executes function', () => {
       var executedFunction = false;
 
       coroutine(() =>
@@ -17,13 +17,13 @@ describe('coroutine', () => {
       expect(executedFunction).toBe(true);
     });
 
-    it('should pass arguments to function', () => {
+    it('passes arguments to function', () => {
       coroutine((x, y, z) =>
         expect([x, y, z]).toEqual([1, 2, 3])
       , 1, 2, 3);
     });
 
-    it('should immediately execute function in the correct context', () => {
+    it('immediately executes function in the correct context', () => {
       var context = {
         value: 'valueInContext'
       };
@@ -34,14 +34,14 @@ describe('coroutine', () => {
       });
     });
 
-    it('should return promise that immediately resolves to function\'s return value', (done) => {
+    it('returns promise that immediately resolves to function\'s return value', (done) => {
       coroutine(() => 'returnValue').then(value => {
         expect(value).toBe('returnValue');
         done();
       });
     });
 
-    it('should return promise that rejects if the function throws an exception', (done) => {
+    it('returns promise that rejects if the function throws an exception', (done) => {
       coroutine(() => {
         throw 'someError'
       }).catch(error => {
@@ -50,7 +50,7 @@ describe('coroutine', () => {
       });
     });
 
-    it('should return a promise chained to the promise returned by the function if it returns a promise', (done) => {
+    it('returns a promise chained to the promise returned by the function if it returns a promise', (done) => {
       coroutine(() =>
         Promise.resolve('someValue')
       ).then(value => {
@@ -62,7 +62,7 @@ describe('coroutine', () => {
 
   describe('non-function argument', () => {
 
-    it('should resolve to the argument', () => {
+    it('resolves to the argument', () => {
       coroutine(1).then(value =>
         expect(value).toBe(1)
       );
@@ -114,13 +114,31 @@ describe('coroutine', () => {
           });
         });
 
-        //TODO: Generator with no yields
-        //TODO: From a yield the value yielded is returned if it is a single yield?
-        //TODO: Arguments passed to generator are available when it is being executed (like with regular functions)
+        it('executes generator with single yield', (done) => {
+          coroutine(function*() {
+            yield 'a';
+          }).then(value => {
+            expect(value).not.toBeDefined();
+            done();
+          });
+        });
+      });
+    });
+
+    it('passes arguments to the generator', (done) => {
+      coroutine(function*(x, y, z) {
+        return x + y + z;
+      }, 'a', 'b', 'c').then(value => {
+        expect(value).toBe('abc');
+        done();
       });
     });
 
     describe('yields promises', () => {
+
+      function neverResolve() {
+        return new Promise((resolve, reject) => {})
+      }
 
       function asyncResolveTo(value) {
         return new Promise((resolve, reject) => {
@@ -167,10 +185,51 @@ describe('coroutine', () => {
         });
       });
 
-      //TODO: One of the promises that are yielded rejects => whole coroutine rejects
-      //TODO: One of the promises that are yielded is not resolved for a long time, then times out after one minute?
-      //TODO: If the value yielded is a promise the value to which it resolves is returned
-      //TODO: Should pass argument values to the generator function
+      it('rejects if one of the promises rejects', (done) => {
+        var iterationsCount = 0;
+
+        coroutine(function*() {
+          iterationsCount++;
+          yield asyncResolveTo('a');
+          iterationsCount++;
+          yield asyncRejectTo('someError');
+          iterationsCount++;
+          return asyncResolveTo('c');
+        }).catch(error => {
+          expect(error).toBe('someError');
+          expect(iterationsCount).toBe(2);
+          done();
+        });
+      });
+
+      it('returns promise return value for single yield in return', (done) => {
+        var iterationsCount = 0;
+
+        coroutine(function*() {
+          return asyncResolveTo('a');
+        }).then(value => {
+          expect(value).toBe('a');
+          done();
+        });
+      });
+
+      it('is never settled if one of yielded promises is never settled', (done) => {
+        var timeoutMs = 100;
+        var hasResolved = false;
+        var hasRejected = false;
+
+        coroutine(function*() {
+          yield neverResolve();
+        }).then(value => {
+          hasResolved = true;
+        }).catch(error => {
+          hasRejected = true;
+        });
+        setTimeout(() => {
+          expect(hasResolved || hasRejected).toBe(false);
+          done();
+        }, timeoutMs);
+      });
     });
 
     xdescribe('yielding to another generator', () => {
