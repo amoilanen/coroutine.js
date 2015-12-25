@@ -2,8 +2,8 @@ function evaluateIterator(iter, isDone=false, currentValue) {
   if (!isDone) {
     var {value, done} = iter.next(currentValue);
 
-    return Promise.resolve(value).then((nextCurrentValue) =>
-      evaluateIterator(iter, done, nextCurrentValue)
+    return Promise.resolve(value).then((resolvedValue) =>
+      evaluateIterator(iter, done, resolvedValue)
     );
   } else {
     return currentValue;

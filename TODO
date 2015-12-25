@@ -1,9 +1,9 @@
 Every item includes supporting normal execution, errors thrown by the function being executed, etc.
 
-- Not a function or a value are not executed, exception is thrown
-- Function is executed
-- Generator that yields simple values is executed
-- Generator that yields promises is executed
+- Not a function or a value are not executed, exception is thrown - OK
+- Function is executed - OK
+- Generator that yields simple values is executed - OK
+- Generator that yields promises is executed - OK
 - Generator that yields an invocation of another generator is executed
 - Combining co-routines together? Inside a generator?
 
