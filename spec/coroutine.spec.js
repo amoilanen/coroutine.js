@@ -2,6 +2,26 @@ import coroutine from './coroutine'
 
 describe('coroutine', () => {
 
+  function neverResolve() {
+    return new Promise((resolve, reject) => {})
+  }
+
+  function asyncResolveTo(value) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(value);
+      }, 50);
+    });
+  }
+
+  function asyncRejectTo(error) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(error);
+      }, 50);
+    });
+  }
+
   it('should be defined', () => {
     expect(coroutine).toBeDefined();
   });
@@ -71,6 +91,15 @@ describe('coroutine', () => {
 
   describe('generator argument', () => {
 
+    it('passes arguments to the generator', (done) => {
+      coroutine(function*(x, y, z) {
+        return x + y + z;
+      }, 'a', 'b', 'c').then(value => {
+        expect(value).toBe('abc');
+        done();
+      });
+    });
+
     describe('yields simple values', () => {
 
       describe('no yields', () => {
@@ -125,36 +154,7 @@ describe('coroutine', () => {
       });
     });
 
-    it('passes arguments to the generator', (done) => {
-      coroutine(function*(x, y, z) {
-        return x + y + z;
-      }, 'a', 'b', 'c').then(value => {
-        expect(value).toBe('abc');
-        done();
-      });
-    });
-
     describe('yields promises', () => {
-
-      function neverResolve() {
-        return new Promise((resolve, reject) => {})
-      }
-
-      function asyncResolveTo(value) {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve(value);
-          }, 50);
-        });
-      }
-
-      function asyncRejectTo(error) {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            reject(error);
-          }, 50);
-        });
-      }
 
       it('awaits the promises that are yielded', (done) => {
         var iterationsCount = 0;
@@ -232,7 +232,28 @@ describe('coroutine', () => {
       });
     });
 
-    xdescribe('yielding to another generator', () => {
+    describe('yields to another generator', () => {
+
+      it('executes the generators until they stop', (done) => {
+
+        function* innerGenerator() {
+          return 'returnValue';
+        }
+
+        coroutine(function*() {
+          var value = yield* innerGenerator();
+          return value;
+        }).then(value => {
+          expect(value).toBe('returnValue');
+          done();
+        });
+
+        //TODO: Several inner generators
+        //TODO: Several generators nested into each other
+        //TODO: Inner generator passes promises to yield
+        //TODO: Inner generator returns a promise
+        //TODO: Returning an inner generator from the enclosing one
+      });
     });
   });
 });
