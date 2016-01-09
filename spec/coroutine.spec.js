@@ -234,26 +234,68 @@ describe('coroutine', () => {
 
     describe('yields to another generator', () => {
 
-      it('executes the generators until they stop', (done) => {
+      it('executes the inner generator until it stops', (done) => {
 
         function* innerGenerator() {
-          return 'returnValue';
+          yield 'a';
+          yield 'b';
+          return 'c';
         }
 
         coroutine(function*() {
           var value = yield* innerGenerator();
           return value;
         }).then(value => {
+          expect(value).toBe('c');
+          done();
+        });
+      });
+
+      it('executes all inner generators', (done) => {
+
+        var counter = 0;
+
+        function* innerGenerator() {
+          counter++;
+          return counter;
+        }
+
+        coroutine(function*() {
+          yield* innerGenerator();
+          yield* innerGenerator();
+          return yield* innerGenerator();
+        }).then(value => {
+          expect(value).toBe(3);
+          done();
+        });
+      });
+
+      it('executes several nested generators', (done) => {
+
+        function* f1() {
+          return yield* f2();
+        }
+
+        function* f2() {
+          return yield* f3();
+        }
+
+        function* f3() {
+          return 'returnValue';
+        }
+
+        coroutine(function*() {
+          return yield* f1();
+        }).then(value => {
           expect(value).toBe('returnValue');
           done();
         });
-
-        //TODO: Several inner generators
-        //TODO: Several generators nested into each other
-        //TODO: Inner generator passes promises to yield
-        //TODO: Inner generator returns a promise
-        //TODO: Returning an inner generator from the enclosing one
       });
+
+      //TODO: Inner generator passes promises to yield
+      //TODO: Inner generator returns a promise
+      //TODO: Error happens in an inner generator
+      //TODO: Returning an inner generator from the enclosing one
     });
   });
 });
