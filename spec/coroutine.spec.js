@@ -292,8 +292,26 @@ describe('coroutine', () => {
         });
       });
 
-      //TODO: Inner generator passes promises to yield
-      //TODO: Inner generator returns a promise
+      it('executes nested generator that yields promises', (done) => {
+
+        function* inner() {
+          var b = yield asyncResolveTo('b');
+          var c = yield asyncResolveTo('c');
+
+          return asyncResolveTo(b + c + 'd');
+        }
+
+        coroutine(function*() {
+          var a = yield asyncResolveTo('a');
+          var bcd = yield yield* inner();
+
+          return asyncResolveTo(a + bcd + 'e');
+        }).then(value => {
+          expect(value).toBe('abcde');
+          done();
+        });
+      });
+
       //TODO: Error happens in an inner generator
       //TODO: Returning an inner generator from the enclosing one
     });
