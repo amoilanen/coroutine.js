@@ -312,8 +312,36 @@ describe('coroutine', () => {
         });
       });
 
-      //TODO: Error happens in an inner generator
-      //TODO: Returning an inner generator from the enclosing one
+      it('executes nested generator that yields promises', (done) => {
+
+        function* inner() {
+          yield asyncRejectTo('innerError');
+          return 'innerValue';
+        }
+
+        coroutine(function*() {
+          yield* inner();
+
+          return 'externalValue';
+        }).catch(error => {
+          expect(error).toBe('innerError');
+          done();
+        });
+      });
+
+      it('does not execute inner generator when it is just being returned', (done) => {
+
+        function* inner() {
+          yield asyncRejectTo('innerError');
+        }
+
+        coroutine(function*() {
+          return inner;
+        }).then(value => {
+          expect(value).toEqual(inner);
+          done();
+        });
+      });
     });
   });
 });
