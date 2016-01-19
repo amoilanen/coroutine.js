@@ -6,7 +6,8 @@ module.exports = function(config) {
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       './node_modules/promise-polyfill/Promise.js',
       './node_modules/regenerator/runtime.js',
-      'compiled/*.js'
+      'compiled/coroutine.js',
+      'compiled/*.spec.js'
     ],
     exclude: [
     ],
