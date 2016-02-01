@@ -11,7 +11,13 @@ module.exports = function(config) {
     ],
     exclude: [
     ],
-    reporters: ['spec'],
+    reporters: ['spec', 'coverage'],
+    preprocessors: {
+      'compiled/coroutine.js': ['coverage']
+    },
+    coverageReporter: {
+      type: 'text-summary'
+    },
     colors: true,
     logLevel: config.LOG_INFO,
     captureTimeout: 20000,
@@ -20,7 +26,8 @@ module.exports = function(config) {
       'karma-jasmine',
       'karma-phantomjs-launcher',
       'karma-firefox-launcher',
-      'karma-spec-reporter'
+      'karma-spec-reporter',
+      'karma-coverage'
     ]
   });
 };
