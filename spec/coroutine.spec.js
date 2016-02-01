@@ -344,4 +344,23 @@ describe('coroutine', () => {
       });
     });
   });
+
+  describe('nested coroutines', () => {
+
+    it('should execute all coroutines', () => {
+      coroutine(function*() {
+        var a = yield coroutine(function* () {
+          return 'a';
+        });
+        var b = yield coroutine(function* () {
+          return 'b';
+        });
+
+        return a + b + 'c';
+      }).then(value => {
+        expect(value).toBe('abc');
+        done();
+      });
+    });
+  });
 });
