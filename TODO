@@ -7,8 +7,9 @@ Every item includes supporting normal execution, errors thrown by the function b
 - Generator that yields an invocation of another generator is executed - OK
 - Combining co-routines together? Inside a generator? - OK
 
+- Test various module loading schemes, loading in a browser, loading in Node.js, examples
 - Use code coverage, introduce type annotations?
-- Test various module loading schemes, loading in a browser, loading in Node.js
-- Write a few coroutine examples
+- Minify and lint the code
+
 - Write documentation
 - Write a blog post, publish it
