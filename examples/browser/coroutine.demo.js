@@ -20,11 +20,9 @@ var sources = ['1.json', '2.json', '3.json'];
 
 coroutine(function*() {
   var toAssign = [];
-  var sourceContents = sources.map(function* (source) {
-    return yield get(source);
-  });
-  for (let sourceContent of sourceContents) {
-    toAssign.push(yield* sourceContent);
+
+  for (let source of sources) {
+    toAssign.push(yield get(source));
   }
   return Object.assign.apply({}, toAssign);
 }).then(function(value) {
