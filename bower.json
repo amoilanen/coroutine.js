@@ -1,0 +1,27 @@
+{
+  "name": "coroutine.js",
+  "description": "Experiment in building a JavaScript coroutine implementation using generators and promises",
+  "main": "dist/coroutine.js",
+  "authors": [
+    "Anton Ivanov"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "coroutine",
+    "async",
+    "await",
+    "promise"
+  ],
+  "homepage": "https://github.com/antivanov/coroutine.js",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "requirejs": "~2.1.22"
+  }
+}
