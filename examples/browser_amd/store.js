@@ -1,3 +1,5 @@
+'use strict';
+
 define(function() {
 
   var DELAY_MS = 100;
@@ -10,33 +12,28 @@ define(function() {
     });
   }
 
-  function Store() {
-    this.values = {};
+  class Store {
+
+    constructor() {
+      this.values = {};
+    }
+
+    insert(key, value) {
+      return delay(() => {
+        this.values[key] = value;
+      });
+    }
+
+    get(key) {
+      return delay(() => this.values[key]);
+    }
+
+    clear() {
+      return delay(() => {
+        self.values = {};
+      });
+    }
   }
-
-  Store.prototype.insert = function(key, value) {
-    var self = this;
-
-    return delay(function() {
-      self.values[key] = value;
-    });
-  };
-
-  Store.prototype.get = function(key) {
-    var self = this;
-
-    return delay(function() {
-      return self.values[key];
-    });
-  };
-
-  Store.prototype.clear = function() {
-    var self = this;
-
-    return delay(function() {
-      self.values = {};
-    });
-  };
 
   return Store;
 });
