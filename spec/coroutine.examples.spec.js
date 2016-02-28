@@ -1,6 +1,61 @@
 import coroutine from './coroutine'
 
-describe('coroutine example', () => {
+function defer(func) {
+  setTimeout(func, 100);
+}
+
+function asyncResolveTo(value) {
+  return new Promise(function(resolve, reject) {
+    defer(() => {
+      resolve(value);
+    });
+  });
+}
+
+describe('asynchronous data store', () => {
+
+  class Store {
+
+    constructor(items) {
+      this.items = (items instanceof Array) ? items.slice() : [];
+    }
+
+    insert(item, callback) {
+      defer(() => {
+        this.items.push(item);
+        callback();
+      });
+    }
+
+    find(callback) {
+      defer(() => {
+        callback(this.items);
+      });
+    }
+  }
+
+  var store;
+  var initialItems = [1, 2];
+  var newItem = 3;
+
+  beforeEach(() => {
+    store = new Store(initialItems);
+  });
+
+  describe('callbacks', () => {
+
+    it('can use store', (done) => {
+      store.insert(newItem, () => {
+        store.find((items) => {
+          expect(items).toEqual(initialItems.concat(newItem));
+          done();
+        });
+      });
+    });
+  });
+});
+
+describe('multiple data requests', () => {
 
   var news = 'News of the day';
 
@@ -12,13 +67,9 @@ describe('coroutine example', () => {
 
   var postedMessages;
 
-  function defer(func) {
-    setTimeout(func, 100);
-  }
-
   beforeEach(() => {
     postedMessages = [];
-  })
+  });
 
   function expectReceivingProperValues() {
     expect(receivedNews).toEqual(news);
@@ -66,14 +117,6 @@ describe('coroutine example', () => {
   });
 
   describe('no callbacks', () => {
-
-    function asyncResolveTo(value) {
-      return new Promise(function(resolve, reject) {
-        defer(() => {
-          resolve(value);
-        });
-      });
-    }
 
     function getNews() {
       return asyncResolveTo(news);
