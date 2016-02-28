@@ -26,6 +26,7 @@ module.exports = function(config) {
       'karma-jasmine',
       'karma-phantomjs-launcher',
       'karma-firefox-launcher',
+      'karma-jasmine-html-reporter',
       'karma-spec-reporter',
       'karma-coverage'
     ]

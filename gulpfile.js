@@ -39,6 +39,15 @@ gulp.task('dist', ['compile-src'], function() {
     .pipe(gulp.dest('.'));
 });
 
+gulp.task('test-debug', ['compile'], function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    browsers: ['Firefox'],
+    reporters: ['spec', 'kjhtml'],
+    singleRun: false
+  }, done).start();
+});
+
 gulp.task('test', ['compile'], function (done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
