@@ -21,15 +21,21 @@ describe('asynchronous data store', () => {
     }
 
     insert(item, callback) {
-      defer(() => {
-        this.items.push(item);
-        callback();
+      return new Promise((resolve, reject) => {
+        defer(() => {
+          this.items.push(item);
+          callback && callback();
+          resolve();
+        });
       });
     }
 
     find(callback) {
-      defer(() => {
-        callback(this.items);
+      return new Promise((resolve, reject) => {
+        defer(() => {
+          callback && callback(this.items);
+          resolve(this.items);
+        });
       });
     }
   }
@@ -47,6 +53,21 @@ describe('asynchronous data store', () => {
     it('can use store', (done) => {
       store.insert(newItem, () => {
         store.find((items) => {
+          expect(items).toEqual(initialItems.concat(newItem));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('no callbacks', () => {
+
+    describe('pure promises', () => {
+
+      it('can use store', (done) => {
+        store.insert(newItem).then(() => {
+          return store.find();
+        }).then((items) => {
           expect(items).toEqual(initialItems.concat(newItem));
           done();
         });
