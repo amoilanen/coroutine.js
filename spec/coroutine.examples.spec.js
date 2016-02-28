@@ -16,8 +16,8 @@ describe('asynchronous data store', () => {
 
   class Store {
 
-    constructor(items) {
-      this.items = (items instanceof Array) ? items.slice() : [];
+    constructor(items=[]) {
+      this.items = items.slice();
     }
 
     insert(item, callback) {
@@ -50,9 +50,9 @@ describe('asynchronous data store', () => {
 
   describe('callbacks', () => {
 
-    it('can use store', (done) => {
+    it('can use store', done => {
       store.insert(newItem, () => {
-        store.find((items) => {
+        store.find(items => {
           expect(items).toEqual(initialItems.concat(newItem));
           done();
         });
@@ -64,10 +64,23 @@ describe('asynchronous data store', () => {
 
     describe('pure promises', () => {
 
-      it('can use store', (done) => {
+      it('can use store', done => {
         store.insert(newItem).then(() => {
           return store.find();
-        }).then((items) => {
+        }).then(items => {
+          expect(items).toEqual(initialItems.concat(newItem));
+          done();
+        });
+      });
+    });
+
+    describe('coroutine', () => {
+
+      it('can use store', done => {
+        coroutine(function* () {
+          yield store.insert(newItem);
+          var items = yield store.find();
+
           expect(items).toEqual(initialItems.concat(newItem));
           done();
         });
