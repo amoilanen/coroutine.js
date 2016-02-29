@@ -67,6 +67,20 @@ Store methods still return promises, and these are yielded https://developer.moz
 
 In order to use the library require it in Node.js or import it as an AMD module with Require.js or import it globally. Examples can be found in the `examples` folder.
 
+## Browser and JavaScript engine support
+
+Target JavaScript engine has to support:
+
+  - Generators, and yield keyword http://kangax.github.io/compat-table/es6/#test-generators
+  - Promises http://caniuse.com/#search=promise
+
+The library has been tested with:
+
+Chrome 46.0.2490.86
+Firefox 44.0
+
+Node.js 5.0.0
+
 ## License
 
 MIT License
