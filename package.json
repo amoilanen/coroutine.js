@@ -30,6 +30,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "async",
+    "await",
+    "coroutine",
+    "promise",
+    "generator",
+    "yield",
+    "asynchronous"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antivanov/coroutine.js.git"
