@@ -25,6 +25,11 @@
     "test",
     "tests"
   ],
+  "main": [
+    "src/coroutine.js",
+    "coroutine.js",
+    "coroutine.min.js"
+  ],
   "devDependencies": {
     "requirejs": "~2.1.22"
   }
