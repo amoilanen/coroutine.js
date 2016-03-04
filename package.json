@@ -1,6 +1,6 @@
 {
   "name": "coroutine.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Experiment in building a JavaScript coroutine implementation using generators and promises",
   "main": "",
   "dependencies": {},
@@ -42,6 +42,7 @@
     "type": "git",
     "url": "git+https://github.com/antivanov/coroutine.js.git"
   },
+  "main": "coroutine.js",
   "author": "Anton Ivanov",
   "license": "MIT",
   "bugs": {
