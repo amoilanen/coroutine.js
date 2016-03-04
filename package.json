@@ -1,6 +1,6 @@
 {
   "name": "coroutine.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Experiment in building a JavaScript coroutine implementation using generators and promises",
   "main": "",
   "dependencies": {},
